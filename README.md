@@ -43,43 +43,52 @@ replaceState()是替换当前的记录值；
 ```
 #### js:
 ```
-<script type="text/javascript">
+<script>
     jQuery('document').ready(function(){
- 
+
         jQuery('.historyAPI').on('click', function(e){
             e.preventDefault();
             var href = $(this).attr('href');
- 
+
             // Getting Content
             getContent(href, true);
- 
-            jQuery('.historyAPI').removeClass('active');
-            $(this).addClass('active');
+
+            jQuery('.historyAPI').parent().removeClass('active');
+            $(this).parent().addClass('active');
         });
- 
+
     });
- 
-    // Adding popstate event listener to handle browser back button 
+
+    // Adding popstate event listener to handle browser back button  
     window.addEventListener("popstate", function(e) {
- 
-        // Get State value using e.state
+
+        // Update Content
         getContent(location.pathname, false);
+        jQuery('.historyAPI').parent().removeClass('active');
+        $('a[href="'+e.state.location+'"]').parent().addClass('active');
+
     });
- 
+
     function getContent(url, addEntry) {
         $.get(url)
         .done(function( data ) {
- 
+
             // Updating Content on Page
             $('#contentHolder').html(data);
- 
+
             if(addEntry == true) {
+
+                var stateData = {
+                        "location": url 
+                    }
+
                 // Add History Entry using pushState
-                history.pushState(null, null, url);
+                history.pushState(stateData, null, url);	
             }
- 
+
+
         });
     }
-</script>
+</script>	
 ```
 
