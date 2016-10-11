@@ -45,21 +45,19 @@ replaceState()是替换当前的记录值；
 ```
 <script>
     jQuery('document').ready(function(){
-
+        //添加点击事件
         jQuery('.historyAPI').on('click', function(e){
             e.preventDefault();
             var href = $(this).attr('href');
-
-            // Getting Content
+            // 填充内容
             getContent(href, true);
-
             jQuery('.historyAPI').parent().removeClass('active');
             $(this).parent().addClass('active');
         });
 
     });
 
-    // Adding popstate event listener to handle browser back button  
+    // 监听popstate事件操作相应的样式改变  
     window.addEventListener("popstate", function(e) {
 
         // Update Content
@@ -68,7 +66,8 @@ replaceState()是替换当前的记录值；
         $('a[href="'+e.state.location+'"]').parent().addClass('active');
 
     });
-
+    
+    //请求和加载数据，并且把当前的url push 到history堆栈里边  
     function getContent(url, addEntry) {
         $.get(url)
         .done(function( data ) {
@@ -82,11 +81,9 @@ replaceState()是替换当前的记录值；
                         "location": url 
                     }
 
-                // Add History Entry using pushState
+                // Add History Entry using pushState 这里有三个参数 第二个参数由于好多浏览器不支持，所以大多数是null
                 history.pushState(stateData, null, url);	
             }
-
-
         });
     }
 </script>	
